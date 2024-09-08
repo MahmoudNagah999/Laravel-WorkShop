@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CustomerController extends Controller
 {
@@ -12,7 +13,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        return Customer::all();
     }
 
     /**
@@ -28,15 +29,20 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $customer = new Customer();
+        $customer->name = $request->name;
+        $customer->save();
+
+        return $customer;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Customer $customer)
+    public function show(int $id)
     {
-        //
+        $customer = Customer::find($id); 
+        return $customer ?? response()->json(['status' => 'Not Found'], Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -50,16 +56,31 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, int $id)
     {
-        //
+        $customer = Customer::find($id);
+        if(!$customer) {
+            return response()->json(['status' => 'Not Found'], Response::HTTP_NOT_FOUND); 
+        }
+
+        $customer->name = $request->name;
+        $customer->save();
+
+        return $customer;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customer)
+    public function destroy(int $id)
     {
-        //
+        $customer = Customer::find($id);
+        if(!$customer){
+            return response()->json(['status' => 'Not Found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $customer->delete();
+
+        return response()->json(['status' => 'Deleted'], Response::HTTP_OK);
     }
 }
