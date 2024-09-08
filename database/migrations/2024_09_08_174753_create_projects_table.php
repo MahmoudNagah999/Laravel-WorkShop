@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('status');
+            $table->integer('cost');
+            $table->unsignedBigInteger('customer_id');
+            $table->foreign('customer_id')->references('id')->on('customers');
             $table->timestamps();
         });
     }

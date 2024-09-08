@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
+            $table->string('note');
+            $table->unsignedBigInteger('customer_id');
+            $table->foreign('customer_id')->references('id')->on('customers');
             $table->timestamps();
         });
     }
